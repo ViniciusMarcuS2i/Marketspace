@@ -8,6 +8,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        blue: {
+          DEFAULT: "#364D9D",
+          light: "#647AC7"
+        },
+        red: {
+          light: "#ee7979"
+        },
+        gray: {
+          100: "#1A181B",
+          200: "#3E3A40",
+          300: "#5F5B62",
+          400: "#9F9BA1",
+          500: "#D9D8DA",
+          600: "#EDECEE",
+          700: "#F7F7F8"
+        },
         primary: {
           0: 'rgb(var(--color-primary-0)/<alpha-value>)',
           50: 'rgb(var(--color-primary-50)/<alpha-value>)',
@@ -164,8 +180,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        heading: undefined,
-        body: undefined,
+        heading: "Karla_700Bold",
+        body: "Karla_400Regular",
         mono: undefined,
         roboto: ['Roboto', 'sans-serif'],
       },
