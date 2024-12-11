@@ -5,11 +5,12 @@ import { Logo } from "@/src/assets/images";
 
 import AuthInput from "@/src/components/AuthInput";
 import { Button, ButtonText } from "@/src/components/ui/button";
+import { Link } from "expo-router";
 
 function SignIn() {
   return (
     <VStack className="flex-1">
-      <VStack className="rounded-bl-3xl rounded-br-3xl pt-28 bg-gray-600 px-12 pb-20">
+      <VStack className="rounded-bl-3xl rounded-br-3xl bg-gray-600 px-12 pb-20 pt-28">
         <VStack>
           <Image
             resizeMode="contain"
@@ -18,7 +19,7 @@ function SignIn() {
             alt="aa"
             source={Logo}
           />
-          <Text className="text-center text-black text-5xl font-heading">
+          <Text className="text-center font-heading text-5xl text-black">
             marketspace
           </Text>
           <Text className="text-center font-body text-xl">
@@ -26,21 +27,25 @@ function SignIn() {
           </Text>
         </VStack>
         <VStack className="mt-12">
-          <Text className="text-xl text-center">Acesse sua conta</Text>
+          <Text className="text-center text-xl">Acesse sua conta</Text>
           <VStack className="mt-5 gap-5">
             <AuthInput placeholder="E-mail" />
             <AuthInput placeholder="Senha" type="password" />
           </VStack>
         </VStack>
-        <Button className="h-14 mt-10 rounded-md bg-blue-light">
-          <ButtonText className="text-xl font-body">Entrar</ButtonText>
+        <Button className="mt-10 h-14 rounded-md bg-blue-light">
+          <ButtonText className="font-body text-xl">Entrar</ButtonText>
         </Button>
       </VStack>
-      <VStack className="bg-gray-700 items-center gap-4 justify-center px-12 flex-1">
+      <VStack className="flex-1 items-center justify-center gap-4 bg-gray-700 px-12">
         <Text className="text-lg">Ainda não tem acesso?</Text>
-        <Button className="rounded-md bg-gray-500 h-14 w-full">
-          <ButtonText className="text-gra-200">Criar uma conta</ButtonText>
-        </Button>
+        <Link href="/sign-up" asChild>
+          <Button className="h-14 w-full rounded-md bg-gray-500">
+            <ButtonText className="text-lg text-gray-200">
+              Criar uma conta
+            </ButtonText>
+          </Button>
+        </Link>
       </VStack>
     </VStack>
   );

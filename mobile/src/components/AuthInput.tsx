@@ -10,10 +10,10 @@ function AuthInput({ type = "text", placeholder }: AuthInputProps) {
     <Input
       isReadOnly={false}
       isDisabled={false}
-      className="bg-white h-14 rounded-lg pl-2 focus:border-none  border-none"
+      className="h-16 rounded-lg border-none bg-white pl-2 focus:border-none"
     >
       <InputField
-        className="text-xl font-body"
+        className="font-body text-xl"
         type={type}
         placeholder={placeholder}
       />
