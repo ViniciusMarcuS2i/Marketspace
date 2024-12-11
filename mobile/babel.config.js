@@ -1,4 +1,6 @@
-module.exports = function(api) {
+module.exports = function (api) {
+    api.cache(true);
+
     api.cache(true);
 
     api.cache(true);
@@ -6,7 +8,7 @@ module.exports = function(api) {
     return {
         presets: [["babel-preset-expo", {
             jsxImportSource: "nativewind"
-        }], "nativewind/babel", "nativewind/babel"],
+        }], "nativewind/babel"],
 
         plugins: [["module-resolver", {
             root: ["./"],
