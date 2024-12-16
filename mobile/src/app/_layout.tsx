@@ -25,7 +25,11 @@ function Layout() {
     <GluestackUIProvider mode="light">
       <StatusBar translucent style="dark" />
       <Tabs screenOptions={{ headerShown: false }}>
-        <Tabs.Screen name="index" />
+        <Tabs.Screen name="index" options={{ tabBarLabel: "Inicio" }} />
+        <Tabs.Screen
+          name="announcements"
+          options={{ tabBarLabel: "Meus anúncios" }}
+        />
         <Tabs.Screen
           name="(auth)"
           options={{ tabBarItemStyle: { display: "none" } }}
