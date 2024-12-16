@@ -1,8 +1,8 @@
 import { Image } from "@/src/components/ui/image";
 import { VStack } from "@/src/components/ui/vstack";
-import { Logo } from "@/src/assets/images";
+import { Avatar, Logo } from "@/src/assets/images";
 import { Text } from "@/src/components/ui/text";
-import AuthInput from "@/src/components/AuthInput";
+import AuthInput from "@/src/components/auth-input";
 import { Button, ButtonText } from "@/src/components/ui/button";
 import { Pressable } from "@/src/components/ui/pressable";
 import { Link } from "expo-router";
@@ -26,7 +26,7 @@ function SignUp() {
         </Text>
       </VStack>
       <VStack className="mt-8 items-center gap-4">
-        <VStack className="h-28 w-28 rounded-full border-2" />
+        <Image source={Avatar} alt="Avatar" size="lg" />
         <AuthInput placeholder="Nome" />
         <AuthInput placeholder="E-mail" />
         <AuthInput placeholder="Telefone" />

@@ -1,4 +1,4 @@
-import { Slot } from "expo-router";
+import { Tabs } from "expo-router";
 
 import { GluestackUIProvider } from "../components/ui/gluestack-ui-provider";
 
@@ -9,7 +9,7 @@ import {
   Karla_700Bold,
   useFonts,
 } from "@expo-google-fonts/karla";
-import Loading from "../components/Loading";
+import Loading from "../components/loading";
 
 function Layout() {
   const [loadedfonts] = useFonts({
@@ -24,7 +24,13 @@ function Layout() {
   return (
     <GluestackUIProvider mode="light">
       <StatusBar translucent style="dark" />
-      <Slot />
+      <Tabs screenOptions={{ headerShown: false }}>
+        <Tabs.Screen name="index" />
+        <Tabs.Screen
+          name="(auth)"
+          options={{ tabBarItemStyle: { display: "none" } }}
+        />
+      </Tabs>
     </GluestackUIProvider>
   );
 }

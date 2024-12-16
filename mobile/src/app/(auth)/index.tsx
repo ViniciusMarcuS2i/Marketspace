@@ -3,7 +3,7 @@ import { Text } from "@/src/components/ui/text";
 import { VStack } from "@/src/components/ui/vstack";
 import { Logo } from "@/src/assets/images";
 
-import AuthInput from "@/src/components/AuthInput";
+import AuthInput from "@/src/components/auth-input";
 import { Button, ButtonText } from "@/src/components/ui/button";
 import { Link } from "expo-router";
 
