@@ -43,7 +43,7 @@ function Announcements() {
           </SelectTrigger>
           <SelectPortal>
             <SelectBackdrop />
-            <SelectContent>
+            <SelectContent className="pb-4">
               <SelectDragIndicatorWrapper>
                 <SelectDragIndicator />
               </SelectDragIndicatorWrapper>
