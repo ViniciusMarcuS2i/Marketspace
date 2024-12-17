@@ -1,13 +1,43 @@
+import { useState } from "react";
 import { Image } from "@/src/components/ui/image";
 import { Text } from "@/src/components/ui/text";
 import { VStack } from "@/src/components/ui/vstack";
 import { Logo } from "@/src/assets/images";
-
 import AuthInput from "@/src/components/auth-input";
-import { Button, ButtonText } from "@/src/components/ui/button";
+import { Button, ButtonSpinner, ButtonText } from "@/src/components/ui/button";
 import { Link } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebaseConfig";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function SignIn() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const zodSchema = z.object({
+    email: z.string().email("E-mail inválido"),
+    password: z.string().min(1, "Informe sua senha"),
+  });
+
+  type FormData = z.infer<typeof zodSchema>;
+
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<FormData>({
+    resolver: zodResolver(zodSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  function signIn(data: FormData) {
+    signInWithEmailAndPassword(auth, data.email, data.password);
+  }
+
   return (
     <VStack className="flex-1">
       <VStack className="rounded-bl-3xl rounded-br-3xl bg-gray-600 px-12 pb-20 pt-28">
@@ -29,12 +59,51 @@ function SignIn() {
         <VStack className="mt-12">
           <Text className="text-center text-xl">Acesse sua conta</Text>
           <VStack className="mt-5 gap-5">
-            <AuthInput placeholder="E-mail" />
-            <AuthInput placeholder="Senha" type="password" />
+            <VStack>
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { onChange, value } }) => (
+                  <AuthInput
+                    value={value}
+                    onChangeText={onChange}
+                    placeholder="E-mail"
+                  />
+                )}
+              />
+              {errors.email && (
+                <Text className="text-red-500">{errors.email.message}</Text>
+              )}
+            </VStack>
+            <VStack>
+              <Controller
+                control={control}
+                name="password"
+                render={({ field: { onChange, value } }) => (
+                  <AuthInput
+                    value={value}
+                    onChangeText={onChange}
+                    placeholder="Senha"
+                    type="password"
+                  />
+                )}
+              />
+              {errors.password && (
+                <Text className="text-red-500">{errors.password.message}</Text>
+              )}
+            </VStack>
           </VStack>
         </VStack>
-        <Button className="mt-10 h-14 rounded-md bg-blue-light">
-          <ButtonText className="font-body text-xl">Entrar</ButtonText>
+        <Button
+          isDisabled={isLoading}
+          onPress={handleSubmit(signIn)}
+          className="mt-10 h-14 rounded-md bg-blue-light"
+        >
+          {isLoading ? (
+            <ButtonSpinner className="text-white" size="large" />
+          ) : (
+            <ButtonText className="font-body text-xl">Entrar</ButtonText>
+          )}
         </Button>
       </VStack>
       <VStack className="flex-1 items-center justify-center gap-4 bg-gray-700 px-12">

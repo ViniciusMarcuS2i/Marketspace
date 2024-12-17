@@ -10,6 +10,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/karla";
 import Loading from "../components/loading";
+import { AuthProvider } from "../context/authContext";
 
 function Layout() {
   const [loadedfonts] = useFonts({
@@ -23,18 +24,23 @@ function Layout() {
 
   return (
     <GluestackUIProvider mode="light">
-      <StatusBar translucent style="dark" />
-      <Tabs screenOptions={{ headerShown: false }}>
-        <Tabs.Screen name="index" options={{ tabBarLabel: "Inicio" }} />
-        <Tabs.Screen
-          name="announcements"
-          options={{ tabBarLabel: "Meus anúncios" }}
-        />
-        <Tabs.Screen
-          name="(auth)"
-          options={{ tabBarItemStyle: { display: "none" } }}
-        />
-      </Tabs>
+      <AuthProvider>
+        <StatusBar translucent style="dark" />
+        <Tabs screenOptions={{ headerShown: false }}>
+          <Tabs.Screen name="index" options={{ tabBarLabel: "Inicio" }} />
+          <Tabs.Screen
+            name="announcements"
+            options={{ tabBarLabel: "Meus anúncios" }}
+          />
+          <Tabs.Screen
+            name="(auth)"
+            options={{
+              tabBarItemStyle: { display: "none" },
+              tabBarStyle: { display: "none" },
+            }}
+          />
+        </Tabs>
+      </AuthProvider>
     </GluestackUIProvider>
   );
 }

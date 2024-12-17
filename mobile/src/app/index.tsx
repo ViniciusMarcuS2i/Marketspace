@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { VStack } from "../components/ui/vstack";
-import { Redirect } from "expo-router";
+
 import { Header } from "../components/header";
 import { HomeAnnouncementCard } from "../components/home-announcement-card";
 import { Text } from "../components/ui/text";
@@ -8,10 +7,20 @@ import { SearchBar } from "../components/search-bar";
 import { ProductItem } from "../components/product-item";
 import { ScrollView } from "react-native";
 
-function Home() {
-  const [isAuth, setIsAuth] = useState(true);
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext";
+import { Redirect } from "expo-router";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebaseConfig";
+import Loading from "../components/loading";
 
-  if (!isAuth) {
+function Home() {
+  const { user } = useContext(AuthContext);
+
+  async function logout() {
+    await signOut(auth);
+  }
+  if (!user) {
     return <Redirect href="/(auth)" />;
   }
 
@@ -21,7 +30,9 @@ function Home() {
       <VStack className="mt-10">
         <HomeAnnouncementCard />
       </VStack>
-      <Text className="mb-3 mt-6 text-lg">Compre produtos variados</Text>
+      <Text onPress={logout} className="mb-3 mt-6 text-lg">
+        Compre produtos variados
+      </Text>
       <SearchBar />
       <ScrollView className="mt-8">
         <ProductItem />

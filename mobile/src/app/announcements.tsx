@@ -17,8 +17,18 @@ import {
 } from "../components/ui/select";
 import { ChevronDownIcon } from "../components/ui/icon";
 import { ProductItem } from "../components/product-item";
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext";
+import { Redirect } from "expo-router";
+import Loading from "../components/loading";
 
 function Announcements() {
+  const { user } = useContext(AuthContext);
+
+  if (!user) {
+    return <Redirect href="/(auth)" />;
+  }
+
   return (
     <VStack className="px-6 pt-16">
       <HStack className="items-center justify-between">
