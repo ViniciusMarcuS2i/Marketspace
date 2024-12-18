@@ -10,11 +10,17 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, firestore } from "@/firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
 
-import { Controller, set, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ScrollView } from "react-native";
+import { Alert, ScrollView } from "react-native";
 import { useState } from "react";
+import {
+  Toast,
+  ToastDescription,
+  ToastTitle,
+  useToast,
+} from "@/src/components/ui/toast";
 
 const signUpSchema = z
   .object({
@@ -64,14 +70,49 @@ function SignUp() {
         tel: data.tel,
       });
     } catch (error) {
-      console.log(error);
+      if (error.code === "auth/email-already-in-use") {
+        handleToast();
+      }
     } finally {
       setIsLoading(false);
     }
   }
 
+  const toast = useToast();
+  const [toastId, setToastId] = useState(0);
+  const handleToast = () => {
+    if (!toast.isActive(String(toastId))) {
+      showNewToast();
+    }
+  };
+  const showNewToast = () => {
+    const newId = Math.random();
+    setToastId(newId);
+    toast.show({
+      id: String(newId),
+      placement: "top",
+      duration: 3000,
+      render: ({ id }) => {
+        const uniqueToastId = "toast-" + id;
+        return (
+          <Toast
+            className="mt-6"
+            nativeID={uniqueToastId}
+            action="error"
+            variant="outline"
+          >
+            <ToastTitle className="text-error-500">Putz...</ToastTitle>
+            <ToastDescription className="text-error-500">
+              Já existe um usuário com esse email!
+            </ToastDescription>
+          </Toast>
+        );
+      },
+    });
+  };
+
   return (
-    <ScrollView className="flex-1">
+    <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
       <VStack className="flex-1 px-12 pb-4 pt-16">
         <VStack>
           <Image

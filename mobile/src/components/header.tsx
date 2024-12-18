@@ -7,6 +7,7 @@ import { Text } from "./ui/text";
 import { VStack } from "./ui/vstack";
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
+import { router } from "expo-router";
 
 export function Header() {
   const { currentUser } = useContext(AuthContext);
@@ -27,7 +28,12 @@ export function Header() {
       <Button className="h-14 items-center rounded-lg bg-black">
         <MaterialCommunityIcons name="plus" size={20} color="white" />
 
-        <ButtonText className="text-lg">Criar anúncio</ButtonText>
+        <ButtonText
+          onPress={() => router.navigate("/advertise" as any)}
+          className="text-lg"
+        >
+          Criar anúncio
+        </ButtonText>
       </Button>
     </HStack>
   );

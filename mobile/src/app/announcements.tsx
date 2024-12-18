@@ -2,7 +2,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { HStack } from "../components/ui/hstack";
 import { Text } from "../components/ui/text";
 import { VStack } from "../components/ui/vstack";
-import { TouchableOpacity } from "react-native";
+import { FlatList, ScrollView, TouchableOpacity } from "react-native";
 import {
   Select,
   SelectBackdrop,
@@ -17,13 +17,13 @@ import {
 } from "../components/ui/select";
 import { ChevronDownIcon } from "../components/ui/icon";
 import { ProductItem } from "../components/product-item";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/authContext";
-import { Redirect } from "expo-router";
-import Loading from "../components/loading";
+import { Redirect, router } from "expo-router";
+import { Spinner } from "../components/ui/spinner";
 
 function Announcements() {
-  const { user } = useContext(AuthContext);
+  const { user, currentUserProducts } = useContext(AuthContext);
 
   if (!user) {
     return <Redirect href="/(auth)" />;
@@ -34,14 +34,15 @@ function Announcements() {
       <HStack className="items-center justify-between">
         <Text className="font-heading text-2xl">Meus anúncios</Text>
         <TouchableOpacity
+          onPress={() => router.navigate("/advertise")}
           activeOpacity={0.8}
-          className="rounded-lg bg-blue-light"
+          className="rounded-lg bg-gray-100"
         >
           <MaterialCommunityIcons name="plus" color="white" size={24} />
         </TouchableOpacity>
       </HStack>
       <HStack className="mt-12 items-center justify-between">
-        <Text className="text-xl">9 anúncios</Text>
+        <Text className="text-xl">{currentUserProducts.length} anúncios</Text>
 
         <Select className="items-center">
           <SelectTrigger variant="outline" className="px-2" size="lg">
@@ -64,9 +65,16 @@ function Announcements() {
           </SelectPortal>
         </Select>
       </HStack>
-      <VStack className="mt-8">
-        <ProductItem />
-      </VStack>
+      <FlatList
+        numColumns={2}
+        keyExtractor={(item) => item.id}
+        data={currentUserProducts}
+        contentContainerStyle={{ flexGrow: 1, marginTop: 24 }}
+        renderItem={({ item }) => <ProductItem product={item} />}
+        ListEmptyComponent={() => (
+          <Spinner size="small" className="color-blue" />
+        )}
+      />
     </VStack>
   );
 }

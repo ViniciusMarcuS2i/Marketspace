@@ -2,8 +2,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { HStack } from "./ui/hstack";
 import { Text } from "./ui/text";
 import { VStack } from "./ui/vstack";
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext";
 
 export function HomeAnnouncementCard() {
+  const { currentUserProducts } = useContext(AuthContext);
+
   return (
     <VStack className="gap-4">
       <Text className="text-[16px]">Seus produtos anunciados para venda</Text>
@@ -15,7 +19,9 @@ export function HomeAnnouncementCard() {
             color="#364D9D"
           />
           <VStack>
-            <Text className="font-heading text-2xl">4</Text>
+            <Text className="font-heading text-2xl">
+              {currentUserProducts.length}
+            </Text>
             <Text>anúncios ativos</Text>
           </VStack>
         </HStack>

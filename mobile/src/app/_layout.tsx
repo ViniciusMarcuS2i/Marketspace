@@ -39,6 +39,20 @@ function Layout() {
               tabBarStyle: { display: "none" },
             }}
           />
+          <Tabs.Screen
+            name="product/[id]"
+            options={{
+              tabBarItemStyle: { display: "none" },
+              tabBarStyle: { display: "none" },
+            }}
+          />
+          <Tabs.Screen
+            name="advertise/index"
+            options={{
+              tabBarStyle: { display: "none" },
+              tabBarItemStyle: { display: "none" },
+            }}
+          />
         </Tabs>
       </AuthProvider>
     </GluestackUIProvider>

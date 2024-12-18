@@ -13,6 +13,7 @@ import { Redirect } from "expo-router";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
 import Loading from "../components/loading";
+import ProductList from "../components/product-list";
 
 function Home() {
   const { user } = useContext(AuthContext);
@@ -34,9 +35,8 @@ function Home() {
         Compre produtos variados
       </Text>
       <SearchBar />
-      <ScrollView className="mt-8">
-        <ProductItem />
-      </ScrollView>
+
+      <ProductList />
     </VStack>
   );
 }
