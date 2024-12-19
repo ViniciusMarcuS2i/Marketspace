@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth"
 import { getFirestore } from "firebase/firestore"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA2bqvZEJzRacDv_ERfD-APES2XMCjUXuc",
+  apiKey: process.env.EXPO_PUBLIC_API_KEY,
   authDomain: "marketspace-5d0a1.firebaseapp.com",
   projectId: "marketspace-5d0a1",
   storageBucket: "marketspace-5d0a1.firebasestorage.app",
