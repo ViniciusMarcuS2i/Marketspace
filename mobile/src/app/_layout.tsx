@@ -11,6 +11,7 @@ import {
 } from "@expo-google-fonts/karla";
 import Loading from "../components/loading";
 import { AuthProvider } from "../context/authContext";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 function Layout() {
   const [loadedfonts] = useFonts({
@@ -26,11 +27,37 @@ function Layout() {
     <GluestackUIProvider mode="light">
       <AuthProvider>
         <StatusBar translucent style="dark" />
-        <Tabs screenOptions={{ headerShown: false }}>
-          <Tabs.Screen name="index" options={{ tabBarLabel: "Inicio" }} />
+        <Tabs
+          screenOptions={{
+            headerShown: false,
+            tabBarShowLabel: false,
+            tabBarStyle: { height: 70, paddingTop: 15 },
+          }}
+        >
+          <Tabs.Screen
+            name="index"
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <Ionicons
+                  name={focused ? "home" : "home-outline"}
+                  color={focused ? "#647AC7" : "#9F9BA1"}
+                  size={24}
+                />
+              ),
+            }}
+          />
+
           <Tabs.Screen
             name="announcements"
-            options={{ tabBarLabel: "Meus anúncios" }}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <Ionicons
+                  name={focused ? "pricetags" : "pricetags-outline"}
+                  color={focused ? "#647AC7" : "#9F9BA1"}
+                  size={24}
+                />
+              ),
+            }}
           />
           <Tabs.Screen
             name="(auth)"
