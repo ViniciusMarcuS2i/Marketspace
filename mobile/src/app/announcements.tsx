@@ -2,7 +2,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { HStack } from "../components/ui/hstack";
 import { Text } from "../components/ui/text";
 import { VStack } from "../components/ui/vstack";
-import { FlatList, ScrollView, TouchableOpacity } from "react-native";
+import {
+  FlatList,
+  ScrollView,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
 import {
   Select,
   SelectBackdrop,
@@ -17,13 +22,15 @@ import {
 } from "../components/ui/select";
 import { ChevronDownIcon } from "../components/ui/icon";
 import { ProductItem } from "../components/product-item";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import { Redirect, router } from "expo-router";
-import { Spinner } from "../components/ui/spinner";
+
+import { Skeleton } from "../components/ui/skeleton";
 
 function Announcements() {
   const { user, currentUserProducts } = useContext(AuthContext);
+  const { width } = useWindowDimensions();
 
   if (!user) {
     return <Redirect href="/(auth)" />;
@@ -44,7 +51,7 @@ function Announcements() {
       <HStack className="mt-12 items-center justify-between">
         <Text className="text-xl">{currentUserProducts.length} anúncios</Text>
 
-        <Select className="items-center">
+        <Select selectedValue="Todos" className="items-center">
           <SelectTrigger variant="outline" className="px-2" size="lg">
             <SelectInput
               className="w-30 font-body text-lg"
@@ -65,16 +72,32 @@ function Announcements() {
           </SelectPortal>
         </Select>
       </HStack>
-      <FlatList
-        numColumns={2}
-        keyExtractor={(item) => item.id}
-        data={currentUserProducts}
-        contentContainerStyle={{ flexGrow: 1, marginTop: 24 }}
-        renderItem={({ item }) => <ProductItem product={item} />}
-        ListEmptyComponent={() => (
-          <Spinner size="small" className="color-blue" />
-        )}
-      />
+      {currentUserProducts.length === 0 ? (
+        <HStack className="gap-5">
+          <VStack className="mt-6 gap-2">
+            <Skeleton
+              style={{ width: width / 2 - 30 }}
+              className={`h-[120px]`}
+            />
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-4 w-24" />
+          </VStack>
+          <VStack className="mt-6 gap-2">
+            <Skeleton style={{ width: width / 2 - 30 }} className="h-[120px]" />
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-4 w-24" />
+          </VStack>
+        </HStack>
+      ) : (
+        <FlatList
+          numColumns={2}
+          keyExtractor={(item) => item.id}
+          data={currentUserProducts}
+          contentContainerStyle={{ flexGrow: 1, marginTop: 24 }}
+          renderItem={({ item }) => <ProductItem product={item} />}
+          ListEmptyComponent={() => <Text>Nenhum item encontrado</Text>}
+        />
+      )}
     </VStack>
   );
 }
