@@ -80,7 +80,7 @@ function Product() {
               <Image
                 className="mt-4 h-80 w-full"
                 resizeMode="cover"
-                source={Product2}
+                source={{ uri: product.productImage }}
                 alt="product"
               />
               <VStack className="mt-4 px-6">
@@ -116,7 +116,7 @@ function Product() {
                 <HStack className="mt-4 items-center gap-2">
                   <Text className="font-heading text-xl">Aceita troca?</Text>
                   {product.changleble === true ? (
-                    <Text className="text-lg">Sim</Text>
+                    <Text className="text-xl">Sim</Text>
                   ) : (
                     <Text className="text-xl">Não</Text>
                   )}
@@ -127,7 +127,9 @@ function Product() {
                   </Text>
                   {product.method.map((item) => (
                     <HStack>
-                      <Text className="text-xl">{item}</Text>
+                      <Text key={item.id} className="text-xl">
+                        {item}
+                      </Text>
                     </HStack>
                   ))}
                 </VStack>

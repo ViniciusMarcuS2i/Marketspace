@@ -1,7 +1,14 @@
 import { createContext, useEffect, useState } from "react";
 import { auth, firestore } from "../../firebaseConfig";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
-import { collection, doc, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 
 interface User {
   id: string;
@@ -35,7 +42,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         collection(firestore, "users"),
         where("email", "==", user.email),
       );
-      setCurrentUserProducts([]);
       getDocs(q).then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           setCurrentUser({ ...doc.data(), id: doc.id } as User);
@@ -49,8 +55,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       collection(firestore, "products"),
       where("userId", "==", doc(firestore, "users", currentUser?.id)),
     );
-    const { docs } = await getDocs(q);
-    setCurrentUserProducts(docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    onSnapshot(q, (querySnapshot) => {
+      const p = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setCurrentUserProducts(p);
+    });
   }
 
   useEffect(() => {

@@ -19,10 +19,18 @@ export function Header() {
   return (
     <HStack className="items-center justify-between">
       <HStack className="items-center gap-3">
-        <Image source={Avatar} alt="Logo" size="sm" resizeMode="contain" />
+        <Image
+          className="rounded-full border-2 border-blue-light"
+          source={!currentUser.avatar ? Avatar : { uri: currentUser.avatar }}
+          alt="Logo"
+          size="sm"
+          resizeMode="contain"
+        />
         <VStack>
           <Text className="font-body text-lg">Boas vindas,</Text>
-          <Text className="font-heading text-lg">{currentUser.name}</Text>
+          <Text className="font-heading text-lg">
+            {currentUser.name.split(" ")[0]}
+          </Text>
         </VStack>
       </HStack>
       <Button className="h-14 items-center rounded-lg bg-black">

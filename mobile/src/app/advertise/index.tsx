@@ -27,10 +27,14 @@ import { router } from "expo-router";
 import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { useContext, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { Image } from "@/src/components/ui/image";
 
 function Advertise() {
   const { currentUser } = useContext(AuthContext);
 
+  const [image, setImage] = useState<string | null>(null);
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [selected, setSelected] = useState("NOVO");
   const [isEnabled, setIsEnabled] = useState(false);
   const [isChecked, setIsChecked] = useState([]);
@@ -50,6 +54,7 @@ function Advertise() {
         isNew: selected,
         changeble: isEnabled,
         method: isChecked,
+        productImage: imgUrl,
         userId: doc(firestore, "users", currentUser.id),
       });
       console.log("fixa dms");
@@ -57,6 +62,54 @@ function Advertise() {
       console.log(error);
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function pickImage() {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      }
+      const filename = result.assets[0].uri.substring(
+        result.assets[0].uri.lastIndexOf("/") + 1,
+        result.assets[0].uri.length,
+      );
+      const extend = filename.split(".")[1];
+      const formData = new FormData();
+      formData.append(
+        "image",
+        JSON.parse(
+          JSON.stringify({
+            name: filename,
+            type: `image/${extend}`,
+            uri: result.assets[0].uri,
+          }),
+        ),
+      );
+
+      const response = await fetch(
+        "https://api.imgbb.com/1/upload?key=f35f6607ba8e64218b80c4aa3957a9f3",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      const { data } = await response.json();
+      setImgUrl(data.url);
+      console.log(imgUrl);
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -82,9 +135,17 @@ function Advertise() {
             Escolha até 3 imagens para mostrar o quanto o seu produto é
             incrivel!
           </Text>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity onPress={pickImage} activeOpacity={0.7}>
             <VStack className="mt-4 h-32 w-32 items-center justify-center rounded-xl bg-gray-500">
-              <MaterialCommunityIcons name="plus" size={24} color="white" />
+              {!image ? (
+                <MaterialCommunityIcons name="plus" size={24} color="white" />
+              ) : (
+                <Image
+                  alt="Imagem do produto"
+                  source={{ uri: image }}
+                  className="h-32 w-32 rounded-xl"
+                />
+              )}
             </VStack>
           </TouchableOpacity>
         </VStack>
@@ -102,7 +163,7 @@ function Advertise() {
             <TextareaInput
               value={description}
               onChangeText={setDescription}
-              className="absolute left-3 top-2 font-body text-xl"
+              className="font-body text-xl"
               placeholder="Descreva o produto..."
             />
           </Textarea>

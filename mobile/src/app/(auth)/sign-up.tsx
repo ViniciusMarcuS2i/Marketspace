@@ -9,18 +9,20 @@ import { Link } from "expo-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, firestore } from "@/firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
+import * as ImagePicker from "expo-image-picker";
 
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, ScrollView } from "react-native";
-import { useState } from "react";
+import { Alert, ScrollView, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
 import {
   Toast,
   ToastDescription,
   ToastTitle,
   useToast,
 } from "@/src/components/ui/toast";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const signUpSchema = z
   .object({
@@ -39,6 +41,8 @@ type FormData = z.infer<typeof signUpSchema>;
 
 function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
 
   const {
     control,
@@ -68,6 +72,7 @@ function SignUp() {
         email: user.email,
         name: data.name,
         tel: data.tel,
+        avatar: imgUrl,
       });
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
@@ -111,6 +116,54 @@ function SignUp() {
     });
   };
 
+  async function pickImage() {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      }
+      const filename = result.assets[0].uri.substring(
+        result.assets[0].uri.lastIndexOf("/") + 1,
+        result.assets[0].uri.length,
+      );
+      const extend = filename.split(".")[1];
+      const formData = new FormData();
+      formData.append(
+        "image",
+        JSON.parse(
+          JSON.stringify({
+            name: filename,
+            type: `image/${extend}`,
+            uri: result.assets[0].uri,
+          }),
+        ),
+      );
+
+      const response = await fetch(
+        "https://api.imgbb.com/1/upload?key=f35f6607ba8e64218b80c4aa3957a9f3",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      const { data } = await response.json();
+      setImgUrl(data.url);
+      console.log(imgUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
       <VStack className="flex-1 px-12 pb-4 pt-16">
@@ -130,7 +183,25 @@ function SignUp() {
           </Text>
         </VStack>
         <VStack className="mt-8 items-center gap-4">
-          <Image source={Avatar} alt="Avatar" size="lg" />
+          <TouchableOpacity
+            onPress={pickImage}
+            activeOpacity={0.7}
+            className="relative"
+          >
+            <VStack className="absolute bottom-2 right-0 z-10 rounded-full bg-blue-light p-2">
+              <MaterialCommunityIcons
+                name="pencil-outline"
+                size={16}
+                color="white"
+              />
+            </VStack>
+            <Image
+              className="rounded-full border-2 border-blue-light"
+              source={image ? { uri: image } : Avatar}
+              alt="Foto de perfil"
+              size="lg"
+            />
+          </TouchableOpacity>
           <VStack>
             <Controller
               name="name"

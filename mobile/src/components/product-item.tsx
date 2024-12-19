@@ -10,6 +10,7 @@ import { Product } from "../assets/images";
 import { Badge, BadgeText } from "./ui/badge";
 import { router } from "expo-router";
 import { formatCurrency } from "../utils/formatCurrency";
+import { Spinner } from "./ui/spinner";
 
 interface ProductItemProps {
   id: string;
@@ -17,6 +18,7 @@ interface ProductItemProps {
   price: string;
   isNew: string;
   changeble: boolean;
+  productImage: string;
   method: {
     dinheiro: string;
     boleto: string;
@@ -39,7 +41,7 @@ export function ProductItem({ product }: ProductProps) {
         >
           <VStack>
             <ImageBackground
-              source={Product}
+              source={{ uri: product.productImage }}
               resizeMode="cover"
               style={{
                 height: 120,

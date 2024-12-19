@@ -4,6 +4,8 @@ import { Text } from "./ui/text";
 import { VStack } from "./ui/vstack";
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
+import { TouchableOpacity } from "react-native";
+import { router } from "expo-router";
 
 export function HomeAnnouncementCard() {
   const { currentUserProducts } = useContext(AuthContext);
@@ -25,14 +27,19 @@ export function HomeAnnouncementCard() {
             <Text>anúncios ativos</Text>
           </VStack>
         </HStack>
-        <HStack className="items-center">
-          <Text className="text-[14px] text-blue">Meus anúncios</Text>
-          <MaterialCommunityIcons
-            name="chevron-right"
-            size={26}
-            color="#364D9D"
-          />
-        </HStack>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => router.navigate("/announcements")}
+        >
+          <HStack className="items-center">
+            <Text className="text-[14px] text-blue">Meus anúncios</Text>
+            <MaterialCommunityIcons
+              name="chevron-right"
+              size={26}
+              color="#364D9D"
+            />
+          </HStack>
+        </TouchableOpacity>
       </HStack>
     </VStack>
   );
