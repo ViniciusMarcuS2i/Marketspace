@@ -29,6 +29,15 @@ import { useContext, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Image } from "@/src/components/ui/image";
+import {
+  AlertDialog,
+  AlertDialogBackdrop,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "@/src/components/ui/alert-dialog";
+import { Heading } from "@/src/components/ui/heading";
 
 function Advertise() {
   const { currentUser } = useContext(AuthContext);
@@ -42,6 +51,9 @@ function Advertise() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showAlertDialog, setShowAlertDialog] = useState(false);
+
+  const handleClose = () => setShowAlertDialog(false);
 
   async function handleCreateProduct() {
     try {
@@ -66,6 +78,7 @@ function Advertise() {
   }
 
   async function pickImage() {
+    setShowAlertDialog(false);
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images"],
@@ -135,7 +148,10 @@ function Advertise() {
             Escolha até 3 imagens para mostrar o quanto o seu produto é
             incrivel!
           </Text>
-          <TouchableOpacity onPress={pickImage} activeOpacity={0.7}>
+          <TouchableOpacity
+            onPress={() => setShowAlertDialog(true)}
+            activeOpacity={0.7}
+          >
             <VStack className="mt-4 h-32 w-32 items-center justify-center rounded-xl bg-gray-500">
               {!image ? (
                 <MaterialCommunityIcons name="plus" size={24} color="white" />
@@ -269,6 +285,36 @@ function Advertise() {
           </VStack>
         </VStack>
       </ScrollView>
+      <AlertDialog isOpen={showAlertDialog} onClose={handleClose} size="md">
+        <AlertDialogBackdrop />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <Heading className="font-semibold text-typography-950" size="md">
+              Tem certeza que quer usar essa feature?
+            </Heading>
+          </AlertDialogHeader>
+          <AlertDialogBody className="mb-4 mt-3">
+            <Text size="sm">
+              As imagens estão sendo enviadas para ImgBB, plataforma de
+              hospedagem de terceiros. Não é recomendado subir imagens pessoais,
+              apenas imagens teste!
+            </Text>
+          </AlertDialogBody>
+          <AlertDialogFooter className="">
+            <Button
+              variant="outline"
+              action="secondary"
+              onPress={handleClose}
+              size="sm"
+            >
+              <ButtonText>Cancelar</ButtonText>
+            </Button>
+            <Button size="sm" onPress={pickImage}>
+              <ButtonText>Continuar</ButtonText>
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </VStack>
   );
 }

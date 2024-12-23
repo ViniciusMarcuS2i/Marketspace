@@ -1,16 +1,11 @@
-import {
-  ImageBackground,
-  TouchableOpacity,
-  useWindowDimensions,
-} from "react-native";
+import React from "react";
+import { ImageBackground, TouchableOpacity } from "react-native";
 import { VStack } from "./ui/vstack";
 import { Text } from "./ui/text";
 import { Avatar, AvatarImage } from "./ui/avatar";
-import { Product } from "../assets/images";
 import { Badge, BadgeText } from "./ui/badge";
 import { router } from "expo-router";
 import { formatCurrency } from "../utils/formatCurrency";
-import { Spinner } from "./ui/spinner";
 
 interface ProductItemProps {
   id: string;

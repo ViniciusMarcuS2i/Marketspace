@@ -1,9 +1,9 @@
+import React from "react";
+import { useEffect, useState } from "react";
 import { firestore } from "@/firebaseConfig";
-import { Product2 } from "@/src/assets/images";
 import Loading from "@/src/components/loading";
 import {
   Avatar,
-  AvatarBadge,
   AvatarFallbackText,
   AvatarImage,
 } from "@/src/components/ui/avatar";
@@ -17,7 +17,6 @@ import { formatCurrency } from "@/src/utils/formatCurrency";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { collection, getDoc, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
 
 function Product() {

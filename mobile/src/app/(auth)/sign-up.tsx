@@ -23,6 +23,15 @@ import {
   useToast,
 } from "@/src/components/ui/toast";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  AlertDialog,
+  AlertDialogBackdrop,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "@/src/components/ui/alert-dialog";
+import { Heading } from "@/src/components/ui/heading";
 
 const signUpSchema = z
   .object({
@@ -43,6 +52,9 @@ function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [imgUrl, setImgUrl] = useState<string | null>(null);
+  const [showAlertDialog, setShowAlertDialog] = useState(false);
+
+  const handleClose = () => setShowAlertDialog(false);
 
   const {
     control,
@@ -117,6 +129,7 @@ function SignUp() {
   };
 
   async function pickImage() {
+    setShowAlertDialog(false);
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images"],
@@ -184,7 +197,7 @@ function SignUp() {
         </VStack>
         <VStack className="mt-8 items-center gap-4">
           <TouchableOpacity
-            onPress={pickImage}
+            onPress={() => setShowAlertDialog(true)}
             activeOpacity={0.7}
             className="relative"
           >
@@ -317,6 +330,36 @@ function SignUp() {
           </Link>
         </VStack>
       </VStack>
+      <AlertDialog isOpen={showAlertDialog} onClose={handleClose} size="md">
+        <AlertDialogBackdrop />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <Heading className="font-semibold text-typography-950" size="md">
+              Tem certeza que quer usar essa feature?
+            </Heading>
+          </AlertDialogHeader>
+          <AlertDialogBody className="mb-4 mt-3">
+            <Text size="sm">
+              As imagens estão sendo enviadas para ImgBB, plataforma de
+              hospedagem de terceiros. Não é recomendado subir imagens pessoais,
+              apenas imagens teste!
+            </Text>
+          </AlertDialogBody>
+          <AlertDialogFooter className="">
+            <Button
+              variant="outline"
+              action="secondary"
+              onPress={handleClose}
+              size="sm"
+            >
+              <ButtonText>Cancelar</ButtonText>
+            </Button>
+            <Button size="sm" onPress={pickImage}>
+              <ButtonText>Continuar</ButtonText>
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </ScrollView>
   );
 }
