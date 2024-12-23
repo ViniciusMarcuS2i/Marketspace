@@ -8,9 +8,10 @@ import { Button, ButtonSpinner, ButtonText } from "@/src/components/ui/button";
 import { Link } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, set, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Alert } from "react-native";
 
 function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,8 +35,17 @@ function SignIn() {
     },
   });
 
-  function signIn(data: FormData) {
-    signInWithEmailAndPassword(auth, data.email, data.password);
+  async function signIn(data: FormData) {
+    try {
+      setIsLoading(true);
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+    } catch (error) {
+      if (error.code) {
+        Alert.alert("Erro", "E-mail ou senha inválidos");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
