@@ -69,7 +69,7 @@ function Advertise() {
         productImage: imgUrl,
         userId: doc(firestore, "users", currentUser.id),
       });
-      console.log("fixa dms");
+      router.push("/");
     } catch (error) {
       console.log(error);
     } finally {

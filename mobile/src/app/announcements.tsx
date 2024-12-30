@@ -51,7 +51,7 @@ function Announcements() {
       <HStack className="mt-12 items-center justify-between">
         <Text className="text-xl">{currentUserProducts.length} anúncios</Text>
 
-        <Select selectedValue="Todos" className="items-center">
+        <Select selectedValue="Todos" className="hidden items-center">
           <SelectTrigger variant="outline" className="px-2" size="lg">
             <SelectInput
               className="w-30 font-body text-lg"
@@ -72,7 +72,7 @@ function Announcements() {
           </SelectPortal>
         </Select>
       </HStack>
-      {currentUserProducts.length === 0 ? (
+      {!currentUserProducts ? (
         <HStack className="gap-5">
           <VStack className="mt-6 gap-2">
             <Skeleton

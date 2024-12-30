@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Input, InputField, InputIcon, InputSlot } from "./ui/input";
+import { Input, InputField, InputSlot } from "./ui/input";
 import { HStack } from "./ui/hstack";
 import { Divider } from "./ui/divider";
 

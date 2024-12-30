@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import { firestore } from "@/firebaseConfig";
 import Loading from "@/src/components/loading";
@@ -8,7 +8,7 @@ import {
   AvatarImage,
 } from "@/src/components/ui/avatar";
 import { Badge, BadgeText } from "@/src/components/ui/badge";
-import { Button, ButtonText } from "@/src/components/ui/button";
+import { Button, ButtonIcon, ButtonText } from "@/src/components/ui/button";
 import { HStack } from "@/src/components/ui/hstack";
 import { Image } from "@/src/components/ui/image";
 import { Text } from "@/src/components/ui/text";
@@ -16,31 +16,35 @@ import { VStack } from "@/src/components/ui/vstack";
 import { formatCurrency } from "@/src/utils/formatCurrency";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import { collection, getDoc, getDocs } from "firebase/firestore";
-import { ScrollView, TouchableOpacity } from "react-native";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { ScrollView, TouchableOpacity, View } from "react-native";
+import { AuthContext } from "@/src/context/authContext";
 
 function Product() {
+  const { currentUser } = useContext(AuthContext);
+
   const params = useLocalSearchParams();
   const [product, setProduct] = useState<any>();
+  const [productOwner, setProductOwner] = useState<any>();
   const [isFetching, setIsFetching] = useState(false);
 
   async function fetchProduct() {
     try {
       setIsFetching(true);
       const collectionRef = collection(firestore, "products");
-      await getDocs(collectionRef).then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          if (doc.id === params.id) {
-            setProduct(doc.data());
-          }
-        });
-      });
-      const userItemOwner = product.userId;
-      await getDoc(userItemOwner).then((doc) => {
-        setProduct((prev: any) => ({
-          ...prev,
-          user: doc.data(),
-        }));
+      const querySnapshot = await getDocs(collectionRef);
+      querySnapshot.forEach((doc) => {
+        if (doc.id === params.id) {
+          setProduct(doc.data());
+        }
       });
     } catch (error) {
       console.log(error);
@@ -49,15 +53,44 @@ function Product() {
     }
   }
 
+  async function fetchProductOwner() {
+    try {
+      if (!product) return;
+      const docRef = doc(firestore, "users", product.userId.id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setProductOwner({
+          id: docSnap.id,
+          ...docSnap.data(),
+        });
+      } else {
+        console.log("Sem documento!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function handleDeleteProduct() {
+    try {
+      const productRef = doc(firestore, "products", `${params.id}`);
+      await deleteDoc(productRef);
+
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     fetchProduct();
   }, [params.id]);
 
   useEffect(() => {
-    console.log(product);
+    fetchProductOwner();
   }, [product]);
 
-  if (isFetching) {
+  if (!productOwner || isFetching) {
     return <Loading />;
   }
 
@@ -66,7 +99,7 @@ function Product() {
       {product && (
         <>
           <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-            <VStack className="flex-1 pt-[70px]">
+            <VStack className="flex-1 pt-[60px]">
               <HStack className="px-6">
                 <TouchableOpacity onPress={() => router.back()}>
                   <MaterialCommunityIcons
@@ -135,14 +168,48 @@ function Product() {
               </VStack>
             </VStack>
           </ScrollView>
-          <HStack className="fixed bottom-0 w-full items-center justify-between bg-white px-6 py-6">
-            <Text className="font-heading text-3xl text-blue-light">
-              {formatCurrency(product.price)}
-            </Text>
-            <Button size="xl" className="bg-blue-light">
-              <ButtonText>Entrar em contato</ButtonText>
-            </Button>
-          </HStack>
+
+          {productOwner && productOwner.id === currentUser?.id ? (
+            <>
+              <VStack className="fixed bottom-0 w-full items-center justify-between gap-3 bg-white px-6 py-6">
+                <Button size="xl" className="w-full bg-black">
+                  <MaterialCommunityIcons
+                    name="pencil-outline"
+                    size={20}
+                    color={"#fff"}
+                  />
+                  <ButtonText className="text-lg">Editar anúncio</ButtonText>
+                </Button>
+                <Button
+                  onPress={handleDeleteProduct}
+                  size="xl"
+                  className="w-full bg-red-500"
+                >
+                  <MaterialCommunityIcons
+                    name="trash-can-outline"
+                    size={20}
+                    color={"#fff"}
+                  />
+                  <ButtonText className="text-lg">Excluir anúncio</ButtonText>
+                </Button>
+              </VStack>
+            </>
+          ) : (
+            <>
+              <HStack className="fixed bottom-0 w-full items-center justify-between gap-3 bg-white px-6 py-6">
+                <Text className="font-heading text-3xl text-blue-light">
+                  {formatCurrency(product.price)}
+                </Text>
+                <Button
+                  onPress={handleDeleteProduct}
+                  size="xl"
+                  className="bg-blue-light"
+                >
+                  <ButtonText>Entrar em contato</ButtonText>
+                </Button>
+              </HStack>
+            </>
+          )}
         </>
       )}
     </>

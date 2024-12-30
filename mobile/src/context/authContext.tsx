@@ -23,6 +23,7 @@ interface AuthContextData {
   signIn: (email: string, password: string) => void;
   currentUser: User;
   currentUserProducts: any[];
+  setCurrentUserProducts: (products: any[]) => void;
 }
 
 export const AuthContext = createContext({} as AuthContextData);
@@ -87,7 +88,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, signIn, currentUser, currentUserProducts }}
+      value={{
+        user,
+        setUser,
+        signIn,
+        currentUser,
+        currentUserProducts,
+        setCurrentUserProducts,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -4,15 +4,13 @@ import { Header } from "../components/header";
 import { HomeAnnouncementCard } from "../components/home-announcement-card";
 import { Text } from "../components/ui/text";
 import { SearchBar } from "../components/search-bar";
-import { ProductItem } from "../components/product-item";
-import { ScrollView } from "react-native";
 
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import { Redirect } from "expo-router";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
-import Loading from "../components/loading";
+
 import ProductList from "../components/product-list";
 
 function Home() {

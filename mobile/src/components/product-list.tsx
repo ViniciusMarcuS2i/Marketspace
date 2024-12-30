@@ -1,9 +1,9 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { FlatList, useWindowDimensions } from "react-native";
 import { ProductItem } from "./product-item";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { firestore } from "@/firebaseConfig";
-import { Spinner } from "./ui/spinner";
 import { Text } from "./ui/text";
 import { Skeleton } from "./ui/skeleton";
 import { HStack } from "./ui/hstack";
@@ -22,11 +22,6 @@ function ProductList() {
       }));
       setProducts(p);
     });
-    // const p = docs.map((doc) => ({
-    //   id: doc.id,
-    //   ...doc.data(),
-    // }));
-    // setProducts(p);
   }
 
   useEffect(() => {

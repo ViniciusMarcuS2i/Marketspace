@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Avatar } from "../assets/images";
-import { Button, ButtonText } from "./ui/button";
+import { Button } from "./ui/button";
 import { HStack } from "./ui/hstack";
 import { Image } from "./ui/image";
 import { Text } from "./ui/text";
@@ -8,12 +8,31 @@ import { VStack } from "./ui/vstack";
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import { router } from "expo-router";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebaseConfig";
+import { Alert } from "react-native";
 
 export function Header() {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, setCurrentUserProducts } = useContext(AuthContext);
 
   if (!currentUser) {
     return null;
+  }
+
+  function handleLogout() {
+    Alert.alert("Sair", "Deseja sair da sua conta?", [
+      {
+        text: "Não",
+        style: "cancel",
+      },
+      {
+        text: "Sim",
+        onPress: async () => {
+          await signOut(auth);
+        },
+      },
+    ]);
+    setCurrentUserProducts([]);
   }
 
   return (
@@ -33,16 +52,20 @@ export function Header() {
           </Text>
         </VStack>
       </HStack>
-      <Button className="h-14 items-center rounded-lg bg-black">
-        <MaterialCommunityIcons name="plus" size={20} color="white" />
-
-        <ButtonText
+      <HStack className="gap-3">
+        <Button
           onPress={() => router.navigate("/advertise" as any)}
-          className="text-lg"
+          className="h-14 items-center rounded-lg bg-black"
         >
-          Criar anúncio
-        </ButtonText>
-      </Button>
+          <MaterialCommunityIcons name="plus" size={20} color="white" />
+        </Button>
+        <Button
+          onPress={handleLogout}
+          className="h-14 items-center rounded-lg bg-red-700"
+        >
+          <MaterialCommunityIcons name="logout" size={20} color="white" />
+        </Button>
+      </HStack>
     </HStack>
   );
 }
