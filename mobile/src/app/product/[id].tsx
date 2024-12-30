@@ -116,19 +116,6 @@ function Product() {
                 alt="product"
               />
               <VStack className="mt-4 px-6">
-                <HStack className="items-center gap-2">
-                  <Avatar size="sm">
-                    <AvatarFallbackText>Jane Doe</AvatarFallbackText>
-                    <AvatarImage
-                      source={{
-                        uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-                      }}
-                    />
-                  </Avatar>
-                  <Text className="text-xl text-gray-100">
-                    {product.user && product.user.name}
-                  </Text>
-                </HStack>
                 <HStack>
                   <Badge className="mt-4 rounded-full bg-gray-500 px-4">
                     <BadgeText className="font-heading text-sm">
