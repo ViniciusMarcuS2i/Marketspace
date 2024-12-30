@@ -29,10 +29,10 @@ export function Header() {
         text: "Sim",
         onPress: async () => {
           await signOut(auth);
+          setCurrentUserProducts([]);
         },
       },
     ]);
-    setCurrentUserProducts([]);
   }
 
   return (

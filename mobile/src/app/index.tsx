@@ -16,9 +16,6 @@ import ProductList from "../components/product-list";
 function Home() {
   const { user } = useContext(AuthContext);
 
-  async function logout() {
-    await signOut(auth);
-  }
   if (!user) {
     return <Redirect href="/(auth)" />;
   }
@@ -29,9 +26,7 @@ function Home() {
       <VStack className="mt-10">
         <HomeAnnouncementCard />
       </VStack>
-      <Text onPress={logout} className="mb-3 mt-6 text-lg">
-        Compre produtos variados
-      </Text>
+      <Text className="mb-3 mt-6 text-lg">Compre produtos variados</Text>
       <SearchBar />
 
       <ProductList />
