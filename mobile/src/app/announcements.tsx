@@ -36,6 +36,8 @@ function Announcements() {
     return <Redirect href="/(auth)" />;
   }
 
+
+
   return (
     <VStack className="px-6 pt-16">
       <HStack className="items-center justify-between">
@@ -90,6 +92,7 @@ function Announcements() {
         </HStack>
       ) : (
         <FlatList
+
           numColumns={2}
           keyExtractor={(item) => item.id}
           data={currentUserProducts}

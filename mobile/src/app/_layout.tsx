@@ -14,6 +14,7 @@ import { AuthProvider } from "../context/authContext";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 function Layout() {
+
   const [loadedfonts] = useFonts({
     Karla_400Regular,
     Karla_700Bold,
@@ -42,6 +43,7 @@ function Layout() {
                   name={focused ? "home" : "home-outline"}
                   color={focused ? "#647AC7" : "#9F9BA1"}
                   size={24}
+
                 />
               ),
             }}
