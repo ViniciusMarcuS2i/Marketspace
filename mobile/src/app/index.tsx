@@ -8,8 +8,6 @@ import { SearchBar } from "../components/search-bar";
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import { Redirect } from "expo-router";
-import { signOut } from "firebase/auth";
-import { auth } from "@/firebaseConfig";
 
 import ProductList from "../components/product-list";
 

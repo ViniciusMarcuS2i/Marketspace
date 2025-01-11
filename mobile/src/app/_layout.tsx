@@ -9,7 +9,7 @@ import {
   Karla_700Bold,
   useFonts,
 } from "@expo-google-fonts/karla";
-import Loading from "../components/loading";
+import { Loading } from "../components/Loading";
 import { AuthProvider } from "../context/authContext";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 

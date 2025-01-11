@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import { firestore } from "@/firebaseConfig";
-import Loading from "@/src/components/loading";
+import { Loading } from "@/src/components/Loading";
 import {
   Avatar,
   AvatarFallbackText,
